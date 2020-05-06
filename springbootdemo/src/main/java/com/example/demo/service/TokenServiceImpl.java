@@ -38,16 +38,16 @@ public class TokenServiceImpl implements TokenService{
         String token  = request.getHeader(Const.TOKEN_NAME);
         log.info("tokenservice 中token={}", token);
         if (StringUtils.isEmpty(token)) {
-            throw new IllegalArgumentException("header中未获取到token");
+            throw new TokenServiceException("header中未获取到token");
         }
 
         if (!redisService.exists(token)) {
-            throw new IllegalArgumentException("redis 中不存在token");
+            throw new TokenServiceException("redis 中不存在token");
         }
 
         boolean remove = redisService.remove2(token);
         if (!remove) {
-            throw new IllegalArgumentException("删除token失败");
+            throw new TokenServiceException("删除token失败");
         }
         return true;
     }
